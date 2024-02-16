@@ -24,6 +24,9 @@ class HMMFilter:
     # @param sensorR: Representing a sensor reading. (int)
     def filter(self, sensorR, lag=5):
         num_states = self.__sm.get_num_of_states()  # (int) 64
+        pos = self.__sm.reading_to_position(sensorR)
+        print('sensorR', sensorR)
+        print('pos: ', pos)
         self.et.append(self.__om.get_o_reading(sensorR))  # Append the observation matrix for the current reading
         self.readings.append(sensorR)
         Ot = self.__om.get_o_reading(sensorR)  # Get diagonal matrix containing P(et|x)
@@ -76,9 +79,9 @@ class HMMFilter:
             f[:, i] = et[i] @ T @ f[:, i - 1]  # TODO: This can return none?
             f[:, i] /= np.sum(f[:, i])
 
-        # Debug: Print statements for forward filtering
-        print(f"\nForward Filtering - Observation (t={i}):", et[i])
-        print(f"Forward Filtering - Forward Matrix (t={i}):", f[:, i])
+            # Debug: Print statements for forward filtering
+            print(f"\nForward Filtering - Observation (t={i}):", et[i])
+            print(f"Forward Filtering - Forward Matrix (t={i}):", f[:, i])
 
         return f
 
