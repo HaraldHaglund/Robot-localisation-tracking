@@ -92,7 +92,7 @@ class TransitionModel:
 
     # get the entire matrix (dimensions: nr_of_states x nr_of_states, type float)
     def get_T(self) -> np.array(2):
-        print(type(self.__matrix))
+        #print(type(self.__matrix))
         return self.__matrix.copy()
 
     # get the transposed transition matrix (dimensions: nr_of_states x nr_of_states, type float)
