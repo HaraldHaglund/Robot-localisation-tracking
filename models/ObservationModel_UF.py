@@ -22,6 +22,7 @@ import random
 
 import models.StateModel
 
+
 class ObservationModelUF:
     def __init__(self, stateModel):
 
@@ -34,117 +35,117 @@ class ObservationModelUF:
         self.__vectors = np.ones(shape=(self.__num_readings, self.__dim))
 
         for o in range(self.__num_readings - 1):
-            sx, sy = self.__stateModel.reading_to_position(o)
+            x, y = self.__stateModel.reading_to_position(o)
 
             for i in range(self.__dim):
-                x, y = self.__stateModel.state_to_position(i)
+                sx, sy = self.__stateModel.state_to_position(i)
                 self.__vectors[o, i] = 0.0
 
                 if x == sx and y == sy:
-                    # "correct" reading 
+                    # "correct" reading
                     self.__vectors[o, i] = 0.1
 
                 elif (x == sx + 1 or x == sx - 1) and y == sy:
                     # first ring, below or above
-                    if ( sx == 0 and (sy == 0 or sy == self.__cols-1)) \
-                        or (sx == self.__rows-1 and (sy == 0 or sy == self.__cols-1)):
-                        self.__vectors[o, i] = 0.4/3
-                    elif ( sx == 0 or sx == self.__rows - 1 or sy == 0 or sy == self.__cols-1):
-                        self.__vectors[o, i] = 0.4/5
+                    if (sx == 0 and (sy == 0 or sy == self.__cols - 1)) \
+                            or (sx == self.__rows - 1 and (sy == 0 or sy == self.__cols - 1)):
+                        self.__vectors[o, i] += 0.4 / 3
+                    elif (sx == 0 or sx == self.__rows - 1 or sy == 0 or sy == self.__cols - 1):
+                        self.__vectors[o, i] += 0.4 / 5
                     else:
                         self.__vectors[o, i] = 0.05
                 elif (x == sx + 1 or x == sx - 1) and (y == sy + 1 or y == sy - 1):
                     # first ring, "corners"
-                    if ( sx == 0 and (sy == 0 or sy == self.__cols-1)) \
-                        or (sx == self.__rows-1 and (sy == 0 or sy == self.__cols-1)):
-                        self.__vectors[o, i] = 0.4/3
-                    elif ( sx == 0 or sx == self.__rows - 1 or sy == 0 or sy == self.__cols-1):
-                        self.__vectors[o, i] = 0.4/5
+                    if (sx == 0 and (sy == 0 or sy == self.__cols - 1)) \
+                            or (sx == self.__rows - 1 and (sy == 0 or sy == self.__cols - 1)):
+                        self.__vectors[o, i] += 0.4 / 3
+                    elif (sx == 0 or sx == self.__rows - 1 or sy == 0 or sy == self.__cols - 1):
+                        self.__vectors[o, i] += 0.4 / 5
                     else:
                         self.__vectors[o, i] = 0.05
                 elif x == sx and (y == sy + 1 or y == sy - 1):
                     # first ring, left or right
-                    if ( sx == 0 and (sy == 0 or sy == self.__cols-1)) \
-                        or (sx == self.__rows-1 and (sy == 0 or sy == self.__cols-1)):
-                        self.__vectors[o, i] = 0.4/3
-                    elif ( sx == 0 or sx == self.__rows - 1 or sy == 0 or sy == self.__cols-1):
-                        self.__vectors[o, i] = 0.4/5
+                    if (sx == 0 and (sy == 0 or sy == self.__cols - 1)) \
+                            or (sx == self.__rows - 1 and (sy == 0 or sy == self.__cols - 1)):
+                        self.__vectors[o, i] += 0.4 / 3
+                    elif (sx == 0 or sx == self.__rows - 1 or sy == 0 or sy == self.__cols - 1):
+                        self.__vectors[o, i] += 0.4 / 5
                     else:
                         self.__vectors[o, i] = 0.05
                 elif (x == sx + 2 or x == sx - 2) and (y == sy or y == sy + 1 or y == sy - 1):
                     # second ring, above / below / left / right
-                    if (sx == 0 and (sy == 0 or sy == self.__cols-1)) \
-                        or (sx == self.__rows-1 and (sy == 0 or sy == self.__cols-1)):
-                        self.__vectors[o, i] = 0.4/5
-                    elif (sx == 0 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sx == self.__rows-1 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sy == 0 and (sx == 1 or sx == self.__rows-2)) \
-                        or (sy == self.__cols-1 and (sx == 1 or sx == self.__rows-2)):
-                        self.__vectors[o, i] = 0.4/6
-                    elif (sx == 1 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sx == self.__rows-1 and (sy == 1 or sy == self.__cols-2)):
-                        self.__vectors[o, i] = 0.4/7
-                    elif (sx == 0 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sx == self.__rows-1 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sy == 0 and (sx >= 2 and sx <= self.__rows-3)) \
-                        or (sy == self.__cols-1 and (sx >= 2 and sx <= self.__rows-3)):
-                        self.__vectors[o, i] = 0.4/9
-                    elif (sx == 1 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sx == self.__rows-2 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sy == 1 and (sx >= 2 and sx <= self.__rows-3)) \
-                        or (sy == self.__cols-2 and (sx >= 2 and sx <= self.__rows-3)):
-                        self.__vectors[o, i] = 0.4/11
+                    if (sx == 0 and (sy == 0 or sy == self.__cols - 1)) \
+                            or (sx == self.__rows - 1 and (sy == 0 or sy == self.__cols - 1)):
+                        self.__vectors[o, i] += 0.4 / 5
+                    elif (sx == 0 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sx == self.__rows - 1 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sy == 0 and (sx == 1 or sx == self.__rows - 2)) \
+                            or (sy == self.__cols - 1 and (sx == 1 or sx == self.__rows - 2)):
+                        self.__vectors[o, i] += 0.4 / 6
+                    elif (sx == 1 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sx == self.__rows - 2 and (sy == 1 or sy == self.__cols - 2)):
+                        self.__vectors[o, i] += 0.4 / 7
+                    elif (sx == 0 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sx == self.__rows - 1 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sy == 0 and (sx >= 2 and sx <= self.__rows - 3)) \
+                            or (sy == self.__cols - 1 and (sx >= 2 and sx <= self.__rows - 3)):
+                        self.__vectors[o, i] += 0.4 / 9
+                    elif (sx == 1 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sx == self.__rows - 2 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sy == 1 and (sx >= 2 and sx <= self.__rows - 3)) \
+                            or (sy == self.__cols - 2 and (sx >= 2 and sx <= self.__rows - 3)):
+                        self.__vectors[o, i] += 0.4 / 11
                     else:
                         self.__vectors[o, i] = 0.025
                 elif (x == sx + 2 or x == sx - 2) and (y == sy + 2 or y == sy - 2):
                     # second ring, "corners"
-                    if (sx == 0 and (sy == 0 or sy == self.__cols-1)) \
-                        or (sx == self.__rows-1 and (sy == 0 or sy == self.__cols-1)):
-                        self.__vectors[o, i] = 0.4/5
-                    elif (sx == 0 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sx == self.__rows-1 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sy == 0 and (sx == 1 or sx == self.__rows-2)) \
-                        or (sy == self.__cols-1 and (sx == 1 or sx == self.__rows-2)):
-                        self.__vectors[o, i] = 0.4/6
-                    elif (sx == 1 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sx == self.__rows-1 and (sy == 1 or sy == self.__cols-2)):
-                        self.__vectors[o, i] = 0.4/7
-                    elif (sx == 0 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sx == self.__rows-1 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sy == 0 and (sx >= 2 and sx <= self.__rows-3)) \
-                        or (sy == self.__cols-1 and (sx >= 2 and sx <= self.__rows-3)):
-                        self.__vectors[o, i] = 0.4/9
-                    elif (sx == 1 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sx == self.__rows-2 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sy == 1 and (sx >= 2 and sx <= self.__rows-3)) \
-                        or (sy == self.__cols-2 and (sx >= 2 and sx <= self.__rows-3)):
-                        self.__vectors[o, i] = 0.4/11
+                    if (sx == 0 and (sy == 0 or sy == self.__cols - 1)) \
+                            or (sx == self.__rows - 1 and (sy == 0 or sy == self.__cols - 1)):
+                        self.__vectors[o, i] += 0.4 / 5
+                    elif (sx == 0 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sx == self.__rows - 1 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sy == 0 and (sx == 1 or sx == self.__rows - 2)) \
+                            or (sy == self.__cols - 1 and (sx == 1 or sx == self.__rows - 2)):
+                        self.__vectors[o, i] += 0.4 / 6
+                    elif (sx == 1 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sx == self.__rows - 2 and (sy == 1 or sy == self.__cols - 2)):
+                        self.__vectors[o, i] += 0.4 / 7
+                    elif (sx == 0 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sx == self.__rows - 1 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sy == 0 and (sx >= 2 and sx <= self.__rows - 3)) \
+                            or (sy == self.__cols - 1 and (sx >= 2 and sx <= self.__rows - 3)):
+                        self.__vectors[o, i] += 0.4 / 9
+                    elif (sx == 1 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sx == self.__rows - 2 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sy == 1 and (sx >= 2 and sx <= self.__rows - 3)) \
+                            or (sy == self.__cols - 2 and (sx >= 2 and sx <= self.__rows - 3)):
+                        self.__vectors[o, i] += 0.4 / 11
                     else:
                         self.__vectors[o, i] = 0.025
-                        
+
                 elif (x == sx or x == sx + 1 or x == sx - 1) and (y == sy + 2 or y == sy - 2):
                     # second ring, "horse" metric
-                    if (sx == 0 and (sy == 0 or sy == self.__cols-1)) \
-                        or (sx == self.__rows-1 and (sy == 0 or sy == self.__cols-1)):
-                        self.__vectors[o, i] = 0.4/5
-                    elif (sx == 0 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sx == self.__rows-1 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sy == 0 and (sx == 1 or sx == self.__rows-2)) \
-                        or (sy == self.__cols-1 and (sx == 1 or sx == self.__rows-2)):
-                        self.__vectors[o, i] = 0.4/6
-                    elif (sx == 1 and (sy == 1 or sy == self.__cols-2)) \
-                        or (sx == self.__rows-1 and (sy == 1 or sy == self.__cols-2)):
-                        self.__vectors[o, i] = 0.4/7
-                    elif (sx == 0 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sx == self.__rows-1 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sy == 0 and (sx >= 2 and sx <= self.__rows-3)) \
-                        or (sy == self.__cols-1 and (sx >= 2 and sx <= self.__rows-3)):
-                        self.__vectors[o, i] = 0.4/9
-                    elif (sx == 1 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sx == self.__rows-2 and (sy >= 2 and sy <= self.__cols-3)) \
-                        or (sy == 1 and (sx >= 2 and sx <= self.__rows-3)) \
-                        or (sy == self.__cols-2 and (sx >= 2 and sx <= self.__rows-3)):
-                        self.__vectors[o, i] = 0.4/11
+                    if (sx == 0 and (sy == 0 or sy == self.__cols - 1)) \
+                            or (sx == self.__rows - 1 and (sy == 0 or sy == self.__cols - 1)):
+                        self.__vectors[o, i] += 0.4 / 5
+                    elif (sx == 0 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sx == self.__rows - 1 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sy == 0 and (sx == 1 or sx == self.__rows - 2)) \
+                            or (sy == self.__cols - 1 and (sx == 1 or sx == self.__rows - 2)):
+                        self.__vectors[o, i] += 0.4 / 6
+                    elif (sx == 1 and (sy == 1 or sy == self.__cols - 2)) \
+                            or (sx == self.__rows - 2 and (sy == 1 or sy == self.__cols - 2)):  # sx == self.___rows-2
+                        self.__vectors[o, i] += 0.4 / 7
+                    elif (sx == 0 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sx == self.__rows - 1 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sy == 0 and (sx >= 2 and sx <= self.__rows - 3)) \
+                            or (sy == self.__cols - 1 and (sx >= 2 and sx <= self.__rows - 3)):
+                        self.__vectors[o, i] += 0.4 / 9
+                    elif (sx == 1 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sx == self.__rows - 2 and (sy >= 2 and sy <= self.__cols - 3)) \
+                            or (sy == 1 and (sx >= 2 and sx <= self.__rows - 3)) \
+                            or (sy == self.__cols - 2 and (sx >= 2 and sx <= self.__rows - 3)):
+                        self.__vectors[o, i] += 0.4 / 11
                     else:
                         self.__vectors[o, i] = 0.025
 
@@ -156,15 +157,21 @@ class ObservationModelUF:
 
     # get the probability for the sensor to have produced reading "reading" when in state "state"
     def get_o_reading_state(self, reading: int, i: int) -> float:
-        if reading == None : reading = self.__num_readings-1
+        if reading == None: reading = self.__num_readings - 1
         return self.__vectors[reading, i]
 
-    # get the diagonale matrix O_reading with probabilities of the states i, i=0...nrOfStates-1 
+    # get the diagonale matrix O_reading with probabilities of the states i, i=0...nrOfStates-1
     # to have produced reading "reading", returns a 2d-float array
     # use None for "no reading"
     def get_o_reading(self, reading: int) -> np.array(2):
         if (reading == None): reading = self.__num_readings - 1
-        return np.diag( self.__vectors[reading, :])
+        return np.diag(self.__vectors[reading, :])
+
+    def sum_diags(self):
+        dummy = np.diag(self.__vectors[0, :])
+        for i in range(1, self.__num_readings):
+            dummy += np.diag(self.__vectors[i, :])
+        return dummy
 
     # plot the vectors as heat map(s)
     def plot_o_diags(self):

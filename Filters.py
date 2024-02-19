@@ -23,6 +23,14 @@ class HMMFilter:
         self.__f /= np.sum(self.__f)
         return self.__f
 
+    # @function random: Returns a random filtering distribution
+    def random(self):
+        # Generate a random state vector
+        random_state = np.random.rand(len(self.__f))
+        random_state /= np.sum(random_state)  # Normalize to make it a valid probability distribution
+        self.__f = random_state
+        return self.__f
+
     # @function smoothing: Performs FB smoothing
     #
     # @param sensorR: Representing a sensor reading. (int)
@@ -39,3 +47,4 @@ class HMMFilter:
             b = self.__tm.get_T() @ self.__om.get_o_reading(observation) @ b  # <----- CHANGED AFTER PEER REVIEW (prev. self.__tm.get_T_transp())
         s = self.__f * b
         return s / np.sum(s)
+
